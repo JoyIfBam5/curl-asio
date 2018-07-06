@@ -66,7 +66,7 @@ void multi::remove(easy* easy_handle)
 	}
 }
 
-void multi::socket_register(boost::shared_ptr<socket_info> si)
+void multi::socket_register(std::shared_ptr<socket_info> si)
 {
 	socket_type::native_handle_type fd = si->socket->native_handle();
 	sockets_.insert(socket_map_type::value_type(fd, si));
@@ -228,7 +228,7 @@ void multi::handle_socket_read(const boost::system::error_code& err, socket_info
 		if (err != boost::asio::error::operation_aborted)
 		{
 			socket_action(si->socket->native_handle(), CURL_CSELECT_ERR);
-			process_messages();			
+			process_messages();
 		}
 
 		si->pending_read_op = false;
@@ -330,7 +330,7 @@ int multi::socket(native::CURL* native_easy, native::curl_socket_t s, int what, 
 	return 0;
 }
 
-int multi::timer(native::CURLM* native_multi, long timeout_ms, void* userp)
+int multi::timer(native::CURLM*, long timeout_ms, void* userp)
 {
 	multi* self = static_cast<multi*>(userp);
 

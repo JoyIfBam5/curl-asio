@@ -12,7 +12,6 @@
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <memory>
 #include <set>
 #include "initialization.h"
@@ -36,11 +35,11 @@ namespace curl
 		void add(easy* easy_handle);
 		void remove(easy* easy_handle);
 
-		void socket_register(boost::shared_ptr<socket_info> si);
+		void socket_register(std::shared_ptr<socket_info> si);
 		void socket_cleanup(native::curl_socket_t s);
 
 	private:
-		typedef boost::shared_ptr<socket_info> socket_info_ptr;
+		using socket_info_ptr = std::shared_ptr<socket_info>;
 
 		void add_handle(native::CURL* native_easy);
 		void remove_handle(native::CURL* native_easy);

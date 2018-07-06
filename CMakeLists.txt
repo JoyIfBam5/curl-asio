@@ -4,7 +4,7 @@
 # Copyright (c) 2013 Oliver Kuckertz <oliver.kuckertz@mologie.de>
 # See COPYING for license information.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.2 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)
 PROJECT(curl-asio)
 
 # Adjust the module path
@@ -16,12 +16,17 @@ OPTION(BUILD_SHARED "Build the shared library" OFF)
 OPTION(BUILD_EXAMPLES "Build the examples" ON)
 
 IF(NOT MSVC)
-	OPTION(ENABLE_CPP11 "Enable features and examples which require C++11" ON)
+    OPTION(ENABLE_CPP11 "Enable features and examples which require C++11" OFF)
 	IF(ENABLE_CPP11)
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
-		FOREACH(_PROPERTY_NAME CMAKE_EXE_LINKER_FLAGS CMAKE_SHARED_LINKER_FLAGS CMAKE_MODULE_LINKER_FLAGS)
-			SET(${_PROPERTY_NAME} "${${_PROPERTY_NAME}} -stdlib=libc++")	
-		ENDFOREACH()
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+	ENDIF()
+        OPTION(ENABLE_CPP14 "Enable features and examples which require C++14" OFF)
+	IF(ENABLE_CPP14)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+	ENDIF()
+	OPTION(ENABLE_CPP1y "Enable features and examples which require C++1y" ON)
+	IF(ENABLE_CPP1y)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 	ENDIF()
 ENDIF()
 
@@ -48,7 +53,7 @@ IF(MSVC)
 		SET(TARGET_WINDOWS_VERSION 0x0501)
 	ENDIF()
 	ADD_DEFINITIONS(-D_WIN32_WINNT=${TARGET_WINDOWS_VERSION})
-	
+
 	# Disable using __declspec(dllimport) when linking statically
 	OPTION(CURL_IS_STATIC "Check if libcurl is a static library" OFF)
 	IF(CURL_IS_STATIC)
@@ -58,7 +63,7 @@ ENDIF()
 
 # Find dependencies
 FIND_PACKAGE(CURLASIO-CURL REQUIRED)
-FIND_PACKAGE(Boost REQUIRED COMPONENTS chrono date_time system thread)
+#FIND_PACKAGE(Boost REQUIRED COMPONENTS date_time system thread)
 
 # Move along
 ADD_SUBDIRECTORY(src)
